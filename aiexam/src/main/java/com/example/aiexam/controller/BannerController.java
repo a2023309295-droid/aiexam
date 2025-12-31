@@ -57,6 +57,7 @@ public class BannerController {
         LambdaQueryWrapper<Banner> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByAsc(Banner::getSortOrder);
         queryWrapper.eq(Banner::getIsDeleted,0);
+        queryWrapper.eq(Banner::getIsActive,true);
         List<Banner> banners = bannerService.list(queryWrapper);
         return Result.success(banners);
     }
