@@ -20,6 +20,7 @@ public class BaseEntity implements Serializable {
     @Schema(description = "创建时间")
     private Date createTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonIgnore
     @Schema(description = "修改时间")
     private Date updateTime;

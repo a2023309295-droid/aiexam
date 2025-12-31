@@ -78,8 +78,12 @@ public class BannerController {
     @GetMapping("/{id}")  // 处理GET请求
     @Operation(summary = "根据ID获取轮播图", description = "根据轮播图ID获取单个轮播图的详细信息")  // API描述  
     public Result<Banner> getBannerById(@Parameter(description = "轮播图ID") @PathVariable Long id) {
-
-      return Result.error("轮播图不存在");
+      Banner banner = bannerService.getById(id);
+      if (banner != null) {
+        return Result.success(banner);
+      }else{
+          return Result.error("轮播图不存在");
+      }
     }
     
     /**
@@ -90,7 +94,8 @@ public class BannerController {
     @PostMapping("/add")  // 处理POST请求
     @Operation(summary = "添加轮播图", description = "创建新的轮播图，需要提供图片URL、标题、跳转链接等信息")  // API描述
     public Result<String> addBanner(@RequestBody Banner banner) {
-        return null;
+        bannerService.save(banner);
+        return Result.success("添加成功");
     }
     
     /**
@@ -101,6 +106,7 @@ public class BannerController {
     @PutMapping("/update")  // 处理PUT请求
     @Operation(summary = "更新轮播图", description = "更新轮播图的信息，包括图片、标题、跳转链接、排序等")  // API描述
     public Result<String> updateBanner(@RequestBody Banner banner) {
+
         return null;
     }
     
