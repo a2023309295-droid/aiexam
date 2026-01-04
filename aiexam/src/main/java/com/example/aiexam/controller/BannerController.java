@@ -2,13 +2,14 @@ package com.example.aiexam.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.aiexam.common.Result;
 import com.example.aiexam.entity.Banner;
 import com.example.aiexam.service.BannerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.util.Map;
  * 轮播图控制器 - 处理轮播图管理相关的HTTP请求
  * 包括图片上传、轮播图的CRUD操作、状态切换等功能
  */
+@Slf4j
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/banners")  // 轮播图API路径前缀
 @CrossOrigin  // 允许跨域访问
@@ -59,6 +61,7 @@ public class BannerController {
         queryWrapper.eq(Banner::getIsDeleted,0);
         queryWrapper.eq(Banner::getIsActive,true);
         List<Banner> banners = bannerService.list(queryWrapper);
+        log.info("前台查询成功,数据{}",banners);
         return Result.success(banners);
     }
     
@@ -72,6 +75,7 @@ public class BannerController {
         LambdaQueryWrapper<Banner> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByAsc(Banner::getSortOrder);
         List<Banner> banners = bannerService.list(queryWrapper);
+        log.info("查询成功,数据{}",banners);
         return Result.success(banners);
     }
     
@@ -111,8 +115,15 @@ public class BannerController {
     @PutMapping("/update")  // 处理PUT请求
     @Operation(summary = "更新轮播图", description = "更新轮播图的信息，包括图片、标题、跳转链接、排序等")  // API描述
     public Result<String> updateBanner(@RequestBody Banner banner) {
-
-        return null;
+        LambdaUpdateWrapper<Banner> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(Banner::getId,banner.getId());
+        lambdaUpdateWrapper.set(Banner::getTitle,banner.getTitle());
+        lambdaUpdateWrapper.set(Banner::getImageUrl,banner.getImageUrl());
+        lambdaUpdateWrapper.set(Banner::getLinkUrl,banner.getLinkUrl());
+        lambdaUpdateWrapper.set(Banner::getDescription,banner.getDescription());
+        lambdaUpdateWrapper.set(Banner::getSortOrder,banner.getSortOrder());
+        bannerService.update(lambdaUpdateWrapper);
+        return Result.success("修改成功");
     }
     
     /**
@@ -123,7 +134,8 @@ public class BannerController {
     @DeleteMapping("/delete/{id}")  // 处理DELETE请求
     @Operation(summary = "删除轮播图", description = "根据ID删除指定的轮播图")  // API描述
     public Result<String> deleteBanner(@Parameter(description = "轮播图ID") @PathVariable Long id) {
-        return null;
+        bannerService.removeById(id);
+        return Result.success("删除成功");
     }
     
     /**
@@ -137,6 +149,10 @@ public class BannerController {
     public Result<String> toggleBannerStatus(
             @Parameter(description = "轮播图ID") @PathVariable Long id, 
             @Parameter(description = "是否启用，true为启用，false为禁用") @RequestParam Boolean isActive) {
-        return null;
+        LambdaUpdateWrapper<Banner> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(Banner::getId,id);
+        lambdaUpdateWrapper.set(Banner::getIsActive,isActive);
+        bannerService.update(lambdaUpdateWrapper);
+        return Result.success("状态修改成功");
     }
 } 
