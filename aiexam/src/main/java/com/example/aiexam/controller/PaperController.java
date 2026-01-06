@@ -22,7 +22,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "试卷管理", description = "试卷相关操作，包括创建、查询、更新、删除，以及AI智能组卷功能")  // Swagger API分组
 public class PaperController {
 
+     private final PaperService paperService;
 
+     public PaperController(PaperService paperService) {
+        this.paperService = paperService;
+    }
 
     /**
      * 获取所有试卷列表（支持模糊搜索和状态筛选）

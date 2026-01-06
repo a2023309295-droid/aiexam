@@ -2,6 +2,7 @@ package com.example.aiexam.controller;
 
 
 import com.example.aiexam.common.Result;
+import com.example.aiexam.service.QuestionService;
 import com.example.aiexam.utils.ExcelUtil;
 import com.example.aiexam.vo.AiGenerateRequestVo;
 import com.example.aiexam.vo.QuestionImportVo;
@@ -26,7 +27,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")  // 允许跨域访问
 @Tag(name = "题目批量操作", description = "题目批量管理相关操作，包括Excel导入、AI生成题目、批量验证等功能")  // Swagger API分组
 public class QuestionBatchController {
-    
+
 
     /**
      * 下载Excel导入模板

@@ -1,7 +1,10 @@
 package com.example.aiexam.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.example.aiexam.common.Result;
 import com.example.aiexam.entity.Category;
+import com.example.aiexam.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +22,11 @@ import java.util.List;
 @Tag(name = "分类管理", description = "题目分类相关操作，包括分类的增删改查、树形结构管理等功能")  // Swagger API分组
 public class CategoryController {
 
+    private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService){
+         this.categoryService = categoryService;
+    }
 
     /**
      * 获取分类列表（包含题目数量）
@@ -27,7 +35,7 @@ public class CategoryController {
     @GetMapping  // 处理GET请求
     @Operation(summary = "获取分类列表", description = "获取所有题目分类列表，包含每个分类下的题目数量统计")  // API描述
     public Result<List<Category>> getCategories() {
-
+        LambdaQueryWrapper<Category> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         return Result.success(null);
     }
 
@@ -38,6 +46,7 @@ public class CategoryController {
     @GetMapping("/tree")  // 处理GET请求
     @Operation(summary = "获取分类树形结构", description = "获取题目分类的树形层级结构，用于前端树形组件展示")  // API描述
     public Result<List<Category>> getCategoryTree() {
+
         return Result.success(null);
     }
 
@@ -49,7 +58,8 @@ public class CategoryController {
     @PostMapping  // 处理POST请求
     @Operation(summary = "添加新分类", description = "创建新的题目分类，支持设置父分类实现层级结构")  // API描述
     public Result<Void> addCategory(@RequestBody Category category) {
-        return Result.success(null);
+        categoryService.save(category);
+        return Result.success("添加新分类");
     }
 
     /**
@@ -60,7 +70,13 @@ public class CategoryController {
     @PutMapping  // 处理PUT请求
     @Operation(summary = "更新分类信息", description = "修改分类的名称、描述、排序等信息")  // API描述
     public Result<Void> updateCategory(@RequestBody Category category) {
-        return Result.success(null);
+        LambdaUpdateWrapper<Category> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(Category::getId, category.getId());
+        lambdaUpdateWrapper.set(Category::getName,category.getName());
+        lambdaUpdateWrapper.set(Category::getParentId,category.getParentId());
+        lambdaUpdateWrapper.set(Category::getSort,category.getSort());
+        categoryService.update(lambdaUpdateWrapper);
+        return Result.success("更新成功");
     }
 
     /**
@@ -72,6 +88,7 @@ public class CategoryController {
     @Operation(summary = "删除分类", description = "删除指定的题目分类，注意：删除前需确保分类下没有题目")  // API描述
     public Result<Void> deleteCategory(
             @Parameter(description = "分类ID") @PathVariable Long id) {
-        return Result.success(null);
+        categoryService.removeById(id);
+        return Result.success("删除成功");
     }
 } 

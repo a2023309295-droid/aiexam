@@ -2,6 +2,7 @@ package com.example.aiexam.controller;
 
 import com.example.aiexam.common.Result;
 import com.example.aiexam.entity.ExamRecord;
+import com.example.aiexam.service.ExamRecordService;
 import com.example.aiexam.vo.ExamRankingVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,7 +25,11 @@ import java.util.List;
 @Tag(name = "考试记录管理", description = "考试记录相关操作，包括记录查询、成绩管理、排行榜展示等功能")  // Swagger API分组
 public class ExamRecordController {
 
+    private final ExamRecordService examRecordService;
 
+    public ExamRecordController(ExamRecordService examRecordService) {
+        this.examRecordService = examRecordService;
+    }
 
     /**
      * 分页查询考试记录

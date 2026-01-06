@@ -3,6 +3,7 @@ package com.example.aiexam.controller;
 
 import com.example.aiexam.common.Result;
 import com.example.aiexam.entity.ExamRecord;
+import com.example.aiexam.service.ExamService;
 import com.example.aiexam.vo.StartExamVo;
 import com.example.aiexam.vo.SubmitAnswerVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,11 @@ import java.util.List;
 @Tag(name = "考试管理", description = "考试流程相关操作，包括开始考试、答题提交、AI批阅、成绩查询等功能")  // Swagger API分组
 public class ExamController {
 
+    private final ExamService examService;
 
+    public ExamController(ExamService examService) {
+        this.examService = examService;
+    }
     /**
      * 开始考试 - 创建新的考试记录
      * @param startExamVo 开始考试请求DTO

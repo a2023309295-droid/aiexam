@@ -2,6 +2,7 @@ package com.example.aiexam.controller;
 
 
 import com.example.aiexam.common.Result;
+import com.example.aiexam.service.UserService;
 import com.example.aiexam.vo.LoginRequestVo;
 import com.example.aiexam.vo.LoginResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "用户管理", description = "用户相关操作，包括登录认证、权限验证等功能")  // Swagger API分组
 public class UserController {
     
+     private final UserService userService;
+
+     public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 用户登录
