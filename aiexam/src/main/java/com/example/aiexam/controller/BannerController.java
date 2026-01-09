@@ -107,6 +107,9 @@ public class BannerController {
     @PostMapping("/add")  // 处理POST请求
     @Operation(summary = "添加轮播图", description = "创建新的轮播图，需要提供图片URL、标题、跳转链接等信息")  // API描述
     public Result<String> addBanner(@RequestBody Banner banner) {
+        if (banner == null) {
+            return Result.error("传递值为空");
+        }
         bannerService.save(banner);
         return Result.success("添加成功");
     }

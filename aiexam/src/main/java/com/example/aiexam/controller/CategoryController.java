@@ -35,8 +35,8 @@ public class CategoryController {
     @GetMapping  // 处理GET请求
     @Operation(summary = "获取分类列表", description = "获取所有题目分类列表，包含每个分类下的题目数量统计")  // API描述
     public Result<List<Category>> getCategories() {
-        LambdaQueryWrapper<Category> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        return Result.success(null);
+        List<Category> list = categoryService.findCategoryList();
+        return Result.success(list);
     }
 
     /**
@@ -46,8 +46,8 @@ public class CategoryController {
     @GetMapping("/tree")  // 处理GET请求
     @Operation(summary = "获取分类树形结构", description = "获取题目分类的树形层级结构，用于前端树形组件展示")  // API描述
     public Result<List<Category>> getCategoryTree() {
-
-        return Result.success(null);
+        List<Category> Tree = categoryService.findCategoryTree();
+        return Result.success(Tree);
     }
 
     /**
